@@ -1,4 +1,4 @@
-const showModal = ({ productTitle, productImage }) => {
+const showModal = (data: any) => {
 	const modalOverlay = document.createElement('div');
 	const modal = document.createElement('div');
 	const modalContent = document.createElement('div');
@@ -6,15 +6,15 @@ const showModal = ({ productTitle, productImage }) => {
 
 	// Set styles for the modal and overlay
 	modalOverlay.style.position = 'fixed';
-	modalOverlay.style.top = 0;
-	modalOverlay.style.left = 0;
-	modalOverlay.style.right = 0;
-	modalOverlay.style.bottom = 0;
+	modalOverlay.style.top = '0';
+	modalOverlay.style.left = '0';
+	modalOverlay.style.right = '0';
+	modalOverlay.style.bottom = '0';
 	modalOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
 	modalOverlay.style.display = 'flex';
 	modalOverlay.style.justifyContent = 'center';
 	modalOverlay.style.alignItems = 'center';
-	modalOverlay.style.zIndex = 9999;
+	modalOverlay.style.zIndex = '9999';
 
 	modal.style.backgroundColor = 'white';
 	modal.style.padding = '20px';
@@ -37,11 +37,11 @@ const showModal = ({ productTitle, productImage }) => {
 const checkForProductId = () => {
 	const productIdElement = document.getElementById('productTitle');
 	const productImageElement = document.querySelector('#imgTagWrapperId img');
-	console.log('from extension: ', productIdElement.innerText, productImageElement.getAttribute('src'));
+	console.log('from content script: ', productIdElement?.innerText, productImageElement?.getAttribute('src'));
 	chrome.runtime.sendMessage({
 		action: 'saveProduct',
 		data: {
-			productTitle: productIdElement.innerHTML,
+			productTitle: productIdElement?.innerHTML,
 			productImage: productImageElement?.getAttribute('src'),
 		},
 	});
