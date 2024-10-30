@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from '../src/App';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const hideComponent = () => {
 	const reactNode = document.getElementById('react-root');
@@ -17,43 +18,13 @@ const showComponent = (data: any) => {
 		body.prepend(app);
 	}
 
-	createRoot(document.getElementById('react-root')!).render(<App hideComponent={hideComponent} data={data} />);
-};
+	const queryClient = new QueryClient();
 
-const showModal = (data: any) => {
-	const modalOverlay = document.createElement('div');
-	const modal = document.createElement('div');
-	const modalContent = document.createElement('div');
-	const closeButton = document.createElement('button');
-
-	// Set styles for the modal and overlay
-	modalOverlay.style.position = 'fixed';
-	modalOverlay.style.top = '0';
-	modalOverlay.style.left = '0';
-	modalOverlay.style.right = '0';
-	modalOverlay.style.bottom = '0';
-	modalOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-	modalOverlay.style.display = 'flex';
-	modalOverlay.style.justifyContent = 'center';
-	modalOverlay.style.alignItems = 'center';
-	modalOverlay.style.zIndex = '9999';
-
-	modal.style.backgroundColor = 'white';
-	modal.style.padding = '20px';
-	modal.style.borderRadius = '5px';
-	modal.style.textAlign = 'center';
-	modal.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
-
-	closeButton.textContent = 'Close';
-	closeButton.onclick = () => {
-		document.body.removeChild(modalOverlay);
-	};
-
-	modalContent.innerHTML = '<h2>Product Found!</h2><p>This page contains the product ID.</p>';
-	modal.appendChild(modalContent);
-	modal.appendChild(closeButton);
-	modalOverlay.appendChild(modal);
-	document.body.appendChild(modalOverlay);
+	createRoot(document.getElementById('react-root')!).render(
+		<QueryClientProvider client={queryClient}>
+			<App hideComponent={hideComponent} productData={data} />
+		</QueryClientProvider>,
+	);
 };
 
 const checkForProductId = () => {
@@ -68,15 +39,11 @@ const checkForProductId = () => {
 		},
 	});
 
-	showComponent({
-		productTitle: productIdElement?.innerText,
-		productImage: productImageElement?.getAttribute('src'),
-	});
-
-	// if (productIdElement) {
-	// 	// Send a message to the React app to show the modal
-	// 	chrome.runtime.sendMessage({ showModal: true });
-	// }
+	if (productIdElement && productImageElement)
+		showComponent({
+			productTitle: productIdElement?.innerText,
+			productImage: productImageElement?.getAttribute('src'),
+		});
 };
 
 checkForProductId();

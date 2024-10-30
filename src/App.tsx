@@ -1,30 +1,19 @@
-import { useState } from 'react';
-import './App.css';
+import './index.css';
+import { useQuery } from 'react-query';
+import { pingServer } from './services/api';
+import { RegisterModal } from './components/register-modal';
+import { LoginModal } from './components/login-modal';
+import SaveProductModal from './components/save-product-modal';
 
-const App = ({ hideComponent, data }: any) => {
-	const [count, setCount] = useState(0);
+const App = ({ hideComponent, productData }: any) => {
+	console.log(hideComponent, productData);
+
+	const { data, error } = useQuery('ping', pingServer);
+	console.log(data, error);
 
 	return (
 		<div>
-			<button
-				className="click-btn"
-				onClick={() => {
-					setCount(count + 1);
-				}}
-			>
-				Click ${count}
-			</button>
-
-			{data && (
-				<button
-					className="click-btn"
-					onClick={() => {
-						hideComponent();
-					}}
-				>
-					Close
-				</button>
-			)}
+			<SaveProductModal />
 		</div>
 	);
 };
