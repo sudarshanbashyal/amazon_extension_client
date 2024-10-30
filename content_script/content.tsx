@@ -1,3 +1,25 @@
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from '../src/App';
+
+const hideComponent = () => {
+	const reactNode = document.getElementById('react-root');
+	reactNode?.remove();
+};
+
+const showComponent = (data: any) => {
+	const body = document.querySelector('body');
+	const app = document.createElement('div');
+
+	app.id = 'react-root';
+
+	if (body) {
+		body.prepend(app);
+	}
+
+	createRoot(document.getElementById('react-root')!).render(<App hideComponent={hideComponent} data={data} />);
+};
+
 const showModal = (data: any) => {
 	const modalOverlay = document.createElement('div');
 	const modal = document.createElement('div');
@@ -46,10 +68,10 @@ const checkForProductId = () => {
 		},
 	});
 
-	// showModal({
-	// 	productTitle: productIdElement.innerText,
-	// 	productImage: productImageElement.getAttribute('src'),
-	// });
+	showComponent({
+		productTitle: productIdElement?.innerText,
+		productImage: productImageElement?.getAttribute('src'),
+	});
 
 	// if (productIdElement) {
 	// 	// Send a message to the React app to show the modal

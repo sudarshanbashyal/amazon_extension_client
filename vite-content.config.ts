@@ -7,7 +7,7 @@ export default defineConfig({
 		target: 'node16',
 		rollupOptions: {
 			input: {
-				content: './content_script/content.ts',
+				content: './content_script/content.tsx',
 			},
 			output: {
 				entryFileNames: 'assets/[name].js',
