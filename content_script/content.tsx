@@ -28,22 +28,59 @@ const showComponent = (data: any) => {
 };
 
 const checkForProductId = () => {
-	const productIdElement = document.getElementById('productTitle');
-	const productImageElement = document.querySelector('#imgTagWrapperId img');
-	console.log('from content script: ', productIdElement?.innerText, productImageElement?.getAttribute('src'));
-	chrome.runtime.sendMessage({
-		action: 'saveProduct',
-		data: {
-			productTitle: productIdElement?.innerHTML,
-			productImage: productImageElement?.getAttribute('src'),
-		},
+	const productTitleEl = document.getElementById('productTitle');
+	const productImageEl = document.querySelector('#imgTagWrapperId img');
+	const productAltImagesEl = document.querySelectorAll('.item.imageThumbnail');
+	const reviewEl = document.querySelector('#averageCustomerReviews .a-size-base.a-color-base');
+
+	const productImageUrls: string[] = [];
+	const productTitle = productTitleEl?.innerText?.trim() || '';
+	const productAvgReview = reviewEl?.textContent || '';
+
+	const primaryImageUrl = productImageEl?.getAttribute('src') || '';
+	productImageUrls.push(primaryImageUrl);
+
+	productAltImagesEl.forEach((el) => {
+		const imgElement = el.querySelector('img');
+		const imgUrl = imgElement?.getAttribute('src') || '';
+		productImageUrls.push(imgUrl);
 	});
 
-	if (productIdElement && productImageElement)
+	if (productTitle && productImageUrls?.length) {
 		showComponent({
-			productTitle: productIdElement?.innerText,
-			productImage: productImageElement?.getAttribute('src'),
+			title: productTitle,
+			review: productAvgReview,
+			imageUrls: productImageUrls,
 		});
+	} else {
+		showComponent({});
+	}
+
+	// chrome.runtime.sendMessage({
+	// 	action: 'saveProduct',
+	// 	data: {
+	// 		productTitle: productTitleEl?.innerHTML,
+	// 		productImage: productImageEl?.getAttribute('src'),
+	// 	},
+	// });
 };
 
-checkForProductId();
+const checkIfExtensionEnabled = () => {
+	chrome.storage.local.get(['extension_enabled'], (items) => {
+		const enabled = items?.extension_enabled;
+		if (enabled) {
+			checkForProductId();
+		}
+	});
+};
+
+checkIfExtensionEnabled();
+
+chrome.storage.local.onChanged.addListener((event: any) => {
+	console.log('changed value: ', event?.extension_enabled?.newValue);
+	if (event?.extension_enabled?.newValue) {
+		checkForProductId();
+	} else if (event?.extension_enabled?.oldValue) {
+		hideComponent();
+	}
+});

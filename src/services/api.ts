@@ -3,7 +3,7 @@ import request, { gql } from 'graphql-request';
 import { LoginDto } from '../components/login-modal';
 import { RegisterDto } from '../components/register-modal';
 import { SaveProductDto } from '../components/save-product-modal';
-import { createUserMutation, loginQuery, pingQuery, saveProductMutation } from './graphql';
+import { createUserMutation, getProductsByUserQuery, loginQuery, pingQuery, saveProductMutation } from './graphql';
 
 export const GRAPHQL_ENDPOINT = 'http://localhost:4000/graphql';
 
@@ -28,6 +28,14 @@ export const login = async (queryVariables: LoginDto) => {
 export const saveProduct = async (queryVariables: SaveProductDto, headers: Object) => {
 	try {
 		return await request(GRAPHQL_ENDPOINT, saveProductMutation, queryVariables, headers);
+	} catch (error) {
+		throw error;
+	}
+};
+
+export const getProductsByUser = async (headers: Object) => {
+	try {
+		return await request(GRAPHQL_ENDPOINT, getProductsByUserQuery, null, headers);
 	} catch (error) {
 		throw error;
 	}

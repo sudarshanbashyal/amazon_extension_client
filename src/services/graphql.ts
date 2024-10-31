@@ -53,3 +53,18 @@ export const saveProductMutation = gql`
 		}
 	}
 `;
+
+export const getProductsByUserQuery = gql`
+	query getProductsByUser {
+		getProductsByUser {
+			_id
+			product_title
+			product_description
+			product_price
+			product_image_urls
+			product_rating
+			product_url
+			user
+		}
+	}
+`;

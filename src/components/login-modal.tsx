@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { modalOverlayStyles, modalStyles } from './styles';
 import { useQuery } from 'react-query';
 import { login } from '../services/api';
+import { AUTH_MODE } from '../App';
 
 export interface LoginDto {
 	email: string;
 	password: string;
 }
 
-export const LoginModal = () => {
+export const LoginModal = ({ setAuthToken, setAuthMode }: any) => {
 	const { data, error, refetch } = useQuery({
 		queryFn: () => login(userData),
 		enabled: false,
@@ -20,7 +21,7 @@ export const LoginModal = () => {
 	useEffect(() => {
 		if (data?.login) {
 			chrome.storage.local.set({ access_token: data.login }, () => {
-				console.log('cookie has been set');
+				setAuthToken(data?.login);
 			});
 		}
 	}, [data]);
@@ -48,6 +49,14 @@ export const LoginModal = () => {
 				<input name="email" value={userData.email} type="email" placeholder="Email" onChange={onChange} />
 				<input name="password" value={userData.password} placeholder="Password" onChange={onChange} />
 				<button onClick={onSubmit}>Submit</button>
+				<button
+					onClick={() => {
+						setAuthMode(AUTH_MODE.AUTH_REGISTER);
+					}}
+				>
+					Register
+				</button>
+				<br></br>
 				<button
 					onClick={() => {
 						let authToken = '';

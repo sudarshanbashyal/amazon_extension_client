@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { modalOverlayStyles, modalStyles } from './styles';
 import { useMutation } from 'react-query';
 import { createUser } from '../services/api';
+import { AUTH_MODE } from '../App';
 
 export interface RegisterDto {
 	name: string;
@@ -10,7 +11,7 @@ export interface RegisterDto {
 	confirmPassword?: string;
 }
 
-export const RegisterModal = () => {
+export const RegisterModal = ({ setAuthMode }: any) => {
 	const [userData, setUserData] = useState<RegisterDto>({
 		name: '',
 		email: '',
@@ -21,7 +22,6 @@ export const RegisterModal = () => {
 	const registerMutation = useMutation({
 		mutationFn: (registerDto: RegisterDto) => createUser(registerDto),
 	});
-	console.log('register: ', registerMutation.data, registerMutation.error);
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setUserData((userData) => ({
@@ -37,6 +37,12 @@ export const RegisterModal = () => {
 		registerMutation.mutate(registerData);
 	};
 
+	useEffect(() => {
+		if (registerMutation.data && !registerMutation.isError) {
+			setAuthMode(AUTH_MODE.AUTH_LOGIN);
+		}
+	}, [registerMutation]);
+
 	return (
 		<div className="modal-overlay" style={modalOverlayStyles}>
 			<div className="modal" style={modalStyles}>
@@ -50,6 +56,14 @@ export const RegisterModal = () => {
 					onChange={onChange}
 				/>
 				<button onClick={onSubmit}>Submit</button>
+				<br></br>
+				<button
+					onClick={() => {
+						setAuthMode(AUTH_MODE.AUTH_LOGIN);
+					}}
+				>
+					Login
+				</button>
 			</div>
 		</div>
 	);
