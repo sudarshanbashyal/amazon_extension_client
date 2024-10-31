@@ -19,9 +19,16 @@ export interface SaveProductModalProps {
 	onClose: () => void;
 	onChange: any;
 	setAuthMode: (mode: AUTH_MODE) => void;
+	setHideProductModal: (hide: boolean) => void;
 }
 
-const SaveProductModal = ({ productData, setAuthMode, onClose, onChange }: SaveProductModalProps) => {
+const SaveProductModal = ({
+	productData,
+	setAuthMode,
+	onClose,
+	onChange,
+	setHideProductModal,
+}: SaveProductModalProps) => {
 	const [authToken, setAuthToken] = useState('');
 
 	const saveProductMutation = useMutation({
@@ -69,7 +76,13 @@ const SaveProductModal = ({ productData, setAuthMode, onClose, onChange }: SaveP
 					onChange={onChange}
 				/>
 
-				<button onClick={onClose}>Close</button>
+				<button
+					onClick={() => {
+						setHideProductModal(true);
+					}}
+				>
+					Close
+				</button>
 				<br></br>
 				<button onClick={onClick}>Save product</button>
 			</div>

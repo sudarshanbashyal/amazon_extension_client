@@ -89,13 +89,16 @@ const App = ({ productData, hideComponent }: any) => {
 					<LoginModal setAuthToken={setAuthToken} setAuthMode={setAuthMode} />
 				) : authMode === AUTH_MODE.AUTH_REGISTER ? (
 					<RegisterModal setAuthMode={setAuthMode} />
-				) : (
+				) : !hideProductModal ? (
 					<SaveProductModal
 						productData={productDetails}
 						onClose={hideComponent}
 						onChange={onChange}
 						setAuthMode={setAuthMode}
+						setHideProductModal={setHideProductModal}
 					/>
+				) : (
+					<ProductsModal />
 				)
 			) : productData ? (
 				<ProductsModal />
