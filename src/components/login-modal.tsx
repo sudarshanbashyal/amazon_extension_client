@@ -9,7 +9,12 @@ export interface LoginDto {
 	password: string;
 }
 
-export const LoginModal = ({ setAuthToken, setAuthMode }: any) => {
+export interface LoginProps {
+	setAuthMode: (authMode: AUTH_MODE) => void;
+	setAuthToken: (token: string) => void;
+}
+
+export const LoginModal = ({ setAuthToken, setAuthMode }: LoginProps) => {
 	const { data, error, refetch } = useQuery({
 		queryFn: () => login(userData),
 		enabled: false,

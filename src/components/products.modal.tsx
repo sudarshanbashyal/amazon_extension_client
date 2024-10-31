@@ -3,8 +3,13 @@ import { FaAngleLeft } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { getProductsByUser } from '../services/api';
+import { AUTH_MODE } from '../App';
 
-export const ProductsModal = () => {
+export interface ProductsModalProps {
+	setAuthMode: (val: AUTH_MODE) => void;
+}
+
+export const ProductsModal = ({ setAuthMode }: ProductsModalProps) => {
 	const [showSidebar, setShowSidebar] = useState(false);
 	const [authToken, setAuthToken] = useState('');
 	const [isLoading, setIsLoading] = useState(true);
@@ -20,7 +25,10 @@ export const ProductsModal = () => {
 		refetchOnWindowFocus: false,
 	});
 
-	console.log('products modal: ', data, error);
+	const logout = () => {
+		setAuthToken('');
+		chrome.storage.local.remove('access_token');
+	};
 
 	useEffect(() => {
 		if (showSidebar && authToken) {
@@ -53,9 +61,20 @@ export const ProductsModal = () => {
 
 			{!isLoading &&
 				(!authToken ? (
-					<div>Login to see your products here.</div>
+					<div>
+						Login to see your products here.
+						<button
+							onClick={() => {
+								setShowSidebar(false);
+								setAuthMode(AUTH_MODE.AUTH_LOGIN);
+							}}
+						>
+							Log In
+						</button>
+					</div>
 				) : (
 					<div>
+						<button onClick={logout}>Logout</button>
 						<div>
 							{data?.getProductsByUser?.map((data: any) => (
 								<div>

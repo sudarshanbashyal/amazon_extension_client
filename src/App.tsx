@@ -84,6 +84,7 @@ const App = ({ productData, hideComponent }: any) => {
 		<div>
 			<ToastContainer />
 			{/* {productData && <ProductsModal />} */}
+			{authMode === AUTH_MODE.AUTH_LOGIN && <LoginModal setAuthToken={setAuthToken} setAuthMode={setAuthMode} />}
 			{Object.keys(productData || {})?.length ? (
 				authMode === AUTH_MODE.AUTH_LOGIN ? (
 					<LoginModal setAuthToken={setAuthToken} setAuthMode={setAuthMode} />
@@ -98,10 +99,10 @@ const App = ({ productData, hideComponent }: any) => {
 						setHideProductModal={setHideProductModal}
 					/>
 				) : (
-					<ProductsModal />
+					<ProductsModal setAuthMode={setAuthMode} />
 				)
 			) : productData ? (
-				<ProductsModal />
+				<ProductsModal setAuthMode={setAuthMode} />
 			) : (
 				<DefaultPopup isExtensionEnabled={isExtensionEnabled} setIsExtensionEnabled={setIsExtensionEnabled} />
 			)}
