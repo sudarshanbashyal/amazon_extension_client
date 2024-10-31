@@ -32,6 +32,12 @@ const checkForProductId = () => {
 	const productImageEl = document.querySelector('#imgTagWrapperId img');
 	const productAltImagesEl = document.querySelectorAll('.item.imageThumbnail');
 	const reviewEl = document.querySelector('#averageCustomerReviews .a-size-base.a-color-base');
+	const pricesEl = document.querySelectorAll('.a-price.a-text-price');
+
+	const productFactsDetails = document.getElementById('productFactsDesktop_feature_div');
+	const featuredBulletsEl = document.getElementById('feature-bullets');
+
+	console.log('content script: ', featuredBulletsEl);
 
 	const productImageUrls: string[] = [];
 	const productTitle = productTitleEl?.innerText?.trim() || '';
@@ -46,15 +52,34 @@ const checkForProductId = () => {
 		productImageUrls.push(imgUrl);
 	});
 
-	if (productTitle && productImageUrls?.length) {
-		showComponent({
-			title: productTitle,
-			review: productAvgReview,
-			imageUrls: productImageUrls,
+	// creating a set because sometimes the off-screen prices are duplicated on amazon webpage
+	const productPrices = new Set();
+	pricesEl.forEach((el) => {
+		const priceEl = el.querySelector('span');
+		const price = priceEl?.textContent || '';
+		productPrices.add(price);
+	});
+
+	const productDescriptionPoints: string[] = [];
+	if (featuredBulletsEl || productFactsDetails) {
+		const descriptionEl = featuredBulletsEl || productFactsDetails;
+		const pointsEl = descriptionEl?.querySelectorAll('li');
+		pointsEl?.forEach((el) => {
+			const point = el.querySelector('span')?.textContent || '';
+			if (point) productDescriptionPoints.push(point);
 		});
-	} else {
-		showComponent({});
 	}
+	console.log('content script: ', productDescriptionPoints);
+
+	// if (productTitle && productImageUrls?.length) {
+	// 	showComponent({
+	// 		title: productTitle,
+	// 		review: productAvgReview,
+	// 		imageUrls: productImageUrls,
+	// 	});
+	// } else {
+	// 	showComponent({});
+	// }
 
 	// chrome.runtime.sendMessage({
 	// 	action: 'saveProduct',
