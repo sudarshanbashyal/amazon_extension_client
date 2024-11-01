@@ -1,6 +1,7 @@
 //@ts-ignore
 import request, { gql } from 'graphql-request';
 import { LoginDto } from '../components/login-modal';
+import { PaginationVaribles } from '../components/products.modal';
 import { RegisterDto } from '../components/register-modal';
 import { SaveProductDto } from '../components/save-product-modal';
 import { createUserMutation, getProductsByUserQuery, loginQuery, pingQuery, saveProductMutation } from './graphql';
@@ -33,9 +34,9 @@ export const saveProduct = async (queryVariables: SaveProductDto, headers: Objec
 	}
 };
 
-export const getProductsByUser = async (headers: Object) => {
+export const getProductsByUser = async (queryVariables: PaginationVaribles, headers: Object) => {
 	try {
-		return await request(GRAPHQL_ENDPOINT, getProductsByUserQuery, null, headers);
+		return await request(GRAPHQL_ENDPOINT, getProductsByUserQuery, queryVariables, headers);
 	} catch (error) {
 		throw error;
 	}

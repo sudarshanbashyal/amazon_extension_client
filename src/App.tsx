@@ -80,7 +80,7 @@ const App = ({ productData, hideComponent }: any) => {
 
 	// return (
 	// 	<div>
-	// 		<RegisterModal setAuthMode={setAuthMode} setAuthToken={setAuthToken} />
+	// 		<ProductsModal setAuthMode={setAuthMode} />
 	// 	</div>
 	// );
 

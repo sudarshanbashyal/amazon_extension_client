@@ -177,3 +177,20 @@ export const errorStyle: CSSProperties = {
 export const successStyle: CSSProperties = {
 	color: colors.primaryGreen,
 };
+
+export const paginationContainerStyle: CSSProperties = {
+	backgroundColor: 'transparent',
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center',
+	border: `1px solid ${colors.primaryBlue}`,
+	padding: '0.5rem',
+	cursor: 'pointer',
+	marginRight: '0.5rem',
+};
+
+export const paginationContainerDisabledStyle: CSSProperties = {
+	...paginationContainerStyle,
+	border: '1px solid gray',
+	cursor: 'not-allowed',
+};

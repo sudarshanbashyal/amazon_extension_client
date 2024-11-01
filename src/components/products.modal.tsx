@@ -9,11 +9,12 @@ import {
 	sidebarToggleActive,
 } from './styles';
 import { FaAngleLeft } from 'react-icons/fa';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery } from 'react-query';
 import { getProductsByUser } from '../services/api';
 import { AUTH_MODE } from '../App';
 import { ProductDetail } from './product-detail';
+import { Pagination } from './pagination';
 
 const products = [
 	{
@@ -146,20 +147,35 @@ const products = [
 	},
 ];
 
+export interface PaginationVaribles {
+	limit: number;
+	page: number;
+}
+
 export interface ProductsModalProps {
 	setAuthMode: (val: AUTH_MODE) => void;
 }
 
 export const ProductsModal = ({ setAuthMode }: ProductsModalProps) => {
 	const [showSidebar, setShowSidebar] = useState(false);
-	const [authToken, setAuthToken] = useState('');
-	const [isLoading, setIsLoading] = useState(false);
+	const [authToken, setAuthToken] = useState(''); //
+	const [isLoading, setIsLoading] = useState(true); //
+	const [currPage, setCurrPage] = useState(1);
+
+	const modalRef = useRef<HTMLDivElement>(null);
 
 	const { data, error, refetch } = useQuery({
 		queryFn: () =>
-			getProductsByUser({
-				access_token: authToken,
-			}),
+			getProductsByUser(
+				{
+					limit: 5,
+					page: currPage,
+				},
+				{
+					access_token: authToken,
+				},
+			),
+		queryKey: [currPage],
 		enabled: !!authToken,
 		refetchOnMount: false,
 		refetchOnReconnect: false,
@@ -186,6 +202,12 @@ export const ProductsModal = ({ setAuthMode }: ProductsModalProps) => {
 		});
 	}, [showSidebar]);
 
+	useEffect(() => {
+		if (modalRef?.current) {
+			modalRef?.current?.scrollTo(0, 0);
+		}
+	}, [currPage]);
+
 	return (
 		<>
 			<div
@@ -199,7 +221,7 @@ export const ProductsModal = ({ setAuthMode }: ProductsModalProps) => {
 					<FaAngleLeft color="white" size="25" />
 				</div>
 			</div>
-			<div className="sidebar-modal" style={showSidebar ? sidebarStylesActive : sidebarStyles}>
+			<div ref={modalRef} className="sidebar-modal" style={showSidebar ? sidebarStylesActive : sidebarStyles}>
 				{!isLoading &&
 					(!authToken ? (
 						<div style={sidebarLoginPromptContainer}>
@@ -219,13 +241,31 @@ export const ProductsModal = ({ setAuthMode }: ProductsModalProps) => {
 							<button style={primaryButtonStyle} onClick={logout}>
 								Logout
 							</button>
-							<div>
-								{!data?.getProductsByUser?.length && <h2>No Saved Products.</h2>}
-
-								{data?.getProductsByUser?.map((data: ProductDetail) => (
-									<ProductDetail productDetails={data} />
-								))}
-							</div>
+							{!isLoading ? (
+								<div>
+									{!data?.getProductsByUser?.products?.length ? (
+										<h2>No Saved Products.</h2>
+									) : (
+										<>
+											{data?.getProductsByUser?.products?.map((data: ProductDetail) => (
+												<ProductDetail productDetails={data} />
+											))}
+											<Pagination
+												paginationData={data?.getProductsByUser?.pagination}
+												isLoading={isLoading}
+												onNext={() => {
+													setCurrPage(currPage + 1);
+												}}
+												onPrev={() => {
+													setCurrPage(currPage - 1);
+												}}
+											/>
+										</>
+									)}
+								</div>
+							) : (
+								<h2>Loading...</h2>
+							)}
 						</div>
 					))}
 			</div>

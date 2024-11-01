@@ -55,16 +55,24 @@ export const saveProductMutation = gql`
 `;
 
 export const getProductsByUserQuery = gql`
-	query getProductsByUser {
-		getProductsByUser {
-			_id
-			product_title
-			product_description
-			product_price
-			product_image_urls
-			product_rating
-			product_url
-			user
+	query getProductsByUser($page: Int!, $limit: Int!) {
+		getProductsByUser(pagination: { page: $page, limit: $limit }) {
+			pagination {
+				total
+				page
+				limit
+				totalPages
+			}
+			products {
+				_id
+				product_title
+				product_description
+				product_price
+				product_image_urls
+				product_rating
+				product_url
+				user
+			}
 		}
 	}
 `;
