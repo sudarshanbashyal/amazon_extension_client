@@ -33,6 +33,7 @@ const checkForProductId = () => {
 	const productAltImagesEl = document.querySelectorAll('.item.imageThumbnail');
 	const reviewEl = document.querySelector('#averageCustomerReviews .a-size-base.a-color-base');
 	const pricesEl = document.querySelectorAll('.a-price.a-text-price');
+	const pricesAlternateEl = document.getElementById('corePriceDisplay_desktop_feature_div');
 
 	const productFactsDetails = document.getElementById('productFactsDesktop_feature_div');
 	const featuredBulletsEl = document.getElementById('feature-bullets');
@@ -57,6 +58,15 @@ const checkForProductId = () => {
 		const price = priceEl?.textContent || '';
 		productPrices.add(price);
 	});
+
+	if (pricesAlternateEl) {
+		const sym = pricesAlternateEl?.querySelector('.a-price-symbol')?.textContent || '';
+		const whole = pricesAlternateEl?.querySelector('.a-price-whole')?.textContent || '';
+		const frac = pricesAlternateEl?.querySelector('.a-price-fraction')?.textContent || '';
+
+		let totalPriceString = `${sym}${whole}${frac}`;
+		productPrices.add(totalPriceString);
+	}
 
 	const productDescriptionPoints: string[] = [];
 	if (featuredBulletsEl || productFactsDetails) {
@@ -84,14 +94,6 @@ const checkForProductId = () => {
 	} else {
 		showComponent({});
 	}
-
-	// chrome.runtime.sendMessage({
-	// 	action: 'saveProduct',
-	// 	data: {
-	// 		productTitle: productTitleEl?.innerHTML,
-	// 		productImage: productImageEl?.getAttribute('src'),
-	// 	},
-	// });
 };
 
 const checkIfExtensionEnabled = () => {
