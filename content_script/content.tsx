@@ -69,17 +69,23 @@ const checkForProductId = () => {
 			if (point) productDescriptionPoints.push(point);
 		});
 	}
-	console.log('content script: ', productDescriptionPoints);
 
-	// if (productTitle && productImageUrls?.length) {
-	// 	showComponent({
-	// 		title: productTitle,
-	// 		review: productAvgReview,
-	// 		imageUrls: productImageUrls,
-	// 	});
-	// } else {
-	// 	showComponent({});
-	// }
+	// fetching current url without the query params
+	const currentTabUrl = window.location?.href?.split('?')[0] || '';
+
+	if (!currentTabUrl.startsWith('https://www.amazon.')) return;
+	if (productTitle && productImageUrls?.length) {
+		showComponent({
+			title: productTitle,
+			review: productAvgReview,
+			imageUrls: productImageUrls,
+			description: productDescriptionPoints.join(`\n`),
+			price: Array.from(productPrices).join(','),
+			productUrl: currentTabUrl,
+		});
+	} else {
+		showComponent({});
+	}
 
 	// chrome.runtime.sendMessage({
 	// 	action: 'saveProduct',

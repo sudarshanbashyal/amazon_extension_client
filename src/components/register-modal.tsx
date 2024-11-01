@@ -1,8 +1,16 @@
 import { useEffect, useState } from 'react';
-import { modalOverlayStyles, modalStyles } from './styles';
+import {
+	flexContainerStyle,
+	inputStyle,
+	modalOverlayStyles,
+	modalStyles,
+	primaryButtonStyle,
+	secondaryButtonStyle,
+} from './styles';
 import { useMutation } from 'react-query';
 import { createUser } from '../services/api';
 import { AUTH_MODE } from '../App';
+import { BaseModal } from './base-modal';
 
 export interface RegisterDto {
 	name: string;
@@ -44,27 +52,53 @@ export const RegisterModal = ({ setAuthMode }: any) => {
 	}, [registerMutation]);
 
 	return (
-		<div className="modal-overlay" style={modalOverlayStyles}>
-			<div className="modal" style={modalStyles}>
-				<input name="name" value={userData.name} placeholder="Name" onChange={onChange} />
-				<input name="email" value={userData.email} type="email" placeholder="Email" onChange={onChange} />
-				<input name="password" value={userData.password} placeholder="Password" onChange={onChange} />
-				<input
-					name="confirmPassword"
-					value={userData.confirmPassword}
-					placeholder="Confirm Password"
-					onChange={onChange}
-				/>
-				<button onClick={onSubmit}>Submit</button>
-				<br></br>
+		<BaseModal modalTitle="Register" modalSubtitle="Create a new account">
+			<label>Name</label>
+			<input style={inputStyle} name="name" value={userData.name} placeholder="Name" onChange={onChange} />
+
+			<label>Email</label>
+			<input
+				style={inputStyle}
+				name="email"
+				value={userData.email}
+				type="email"
+				placeholder="Email"
+				onChange={onChange}
+			/>
+
+			<label>Password</label>
+			<input
+				style={inputStyle}
+				type="password"
+				name="password"
+				value={userData.password}
+				placeholder="Password"
+				onChange={onChange}
+			/>
+
+			<label>Confirm Password</label>
+			<input
+				style={inputStyle}
+				name="confirmPassword"
+				type="password"
+				value={userData.confirmPassword}
+				placeholder="Confirm Password"
+				onChange={onChange}
+			/>
+
+			<div style={flexContainerStyle}>
+				<button style={primaryButtonStyle} onClick={onSubmit}>
+					Create account
+				</button>
 				<button
+					style={secondaryButtonStyle}
 					onClick={() => {
 						setAuthMode(AUTH_MODE.AUTH_LOGIN);
 					}}
 				>
-					Login
+					Login Instead
 				</button>
 			</div>
-		</div>
+		</BaseModal>
 	);
 };

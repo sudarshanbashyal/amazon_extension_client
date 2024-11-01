@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { modalOverlayStyles, modalStyles } from './styles';
+import { inputStyle, modalOverlayStyles, modalStyles, primaryButtonStyle, secondaryButtonStyle } from './styles';
 import { useQuery } from 'react-query';
 import { login } from '../services/api';
 import { AUTH_MODE } from '../App';
+import { BaseModal } from './base-modal';
 
 export interface LoginDto {
 	email: string;
@@ -17,6 +18,8 @@ export interface LoginProps {
 export const LoginModal = ({ setAuthToken, setAuthMode }: LoginProps) => {
 	const { data, error, refetch } = useQuery({
 		queryFn: () => login(userData),
+		retry: 0,
+		retryOnMount: false,
 		enabled: false,
 		refetchOnMount: false,
 		refetchOnReconnect: false,
@@ -49,32 +52,40 @@ export const LoginModal = ({ setAuthToken, setAuthMode }: LoginProps) => {
 	};
 
 	return (
-		<div className="modal-overlay" style={modalOverlayStyles}>
-			<div className="modal" style={modalStyles}>
-				<input name="email" value={userData.email} type="email" placeholder="Email" onChange={onChange} />
-				<input name="password" value={userData.password} placeholder="Password" onChange={onChange} />
-				<button onClick={onSubmit}>Submit</button>
+		<BaseModal modalTitle="Sign In" modalSubtitle="Log in to your account to save products.">
+			<label>Email</label>
+			<input
+				style={inputStyle}
+				name="email"
+				value={userData.email}
+				type="email"
+				placeholder="Email"
+				onChange={onChange}
+			/>
+
+			<label>Password</label>
+			<input
+				style={inputStyle}
+				name="password"
+				type="password"
+				value={userData.password}
+				placeholder="Password"
+				onChange={onChange}
+			/>
+
+			<div>
+				<button style={primaryButtonStyle} onClick={onSubmit}>
+					Submit
+				</button>
 				<button
+					style={secondaryButtonStyle}
 					onClick={() => {
 						setAuthMode(AUTH_MODE.AUTH_REGISTER);
 					}}
 				>
-					Register
-				</button>
-				<br></br>
-				<button
-					onClick={() => {
-						let authToken = '';
-						chrome.storage.local.get(['access_token'], (items) => {
-							console.log('items: ', items);
-							authToken = items.access_token;
-						});
-						console.log('auth token: ', authToken);
-					}}
-				>
-					check cookie
+					Register Instead
 				</button>
 			</div>
-		</div>
+		</BaseModal>
 	);
 };

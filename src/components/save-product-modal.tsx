@@ -1,9 +1,18 @@
 import { useEffect, useState } from 'react';
-import { modalOverlayStyles, modalStyles } from './styles';
+import {
+	flexContainerStyle,
+	imageContainer,
+	imageGridDiv,
+	inputStyle,
+	primaryButtonStyle,
+	productImage,
+	secondaryButtonStyle,
+} from './styles';
 import { useMutation } from 'react-query';
 import { saveProduct } from '../services/api';
 import { AUTH_MODE } from '../App';
-import { toast } from 'react-toastify';
+import {} from './styles';
+import { BaseModal } from './base-modal';
 
 export interface SaveProductDto {
 	product_title?: string;
@@ -51,7 +60,7 @@ const SaveProductModal = ({
 	};
 
 	useEffect(() => {
-		chrome.storage.local.get(['access_token'], (items) => {
+		chrome?.storage?.local?.get(['access_token'], (items) => {
 			setAuthToken(items.access_token);
 		});
 	}, []);
@@ -63,30 +72,65 @@ const SaveProductModal = ({
 	}, [saveProductMutation]);
 
 	return (
-		<div className="modal-overlay" style={modalOverlayStyles}>
-			<div className="modal" style={modalStyles}>
-				<input name="product_title" value={productData.product_title} placeholder="Title" onChange={onChange} />
-				<input
-					min={0}
-					max={5}
-					name="product_rating"
-					value={+(productData?.product_rating || 0)}
-					type="number"
-					placeholder="Review Score"
-					onChange={onChange}
-				/>
+		<BaseModal modalTitle="Save Product" modalSubtitle="This product will be saved to your database.">
+			<label>Extracted Title</label>
+			<input
+				style={inputStyle}
+				name="product_title"
+				value={productData.product_title}
+				placeholder="Title"
+				onChange={onChange}
+			/>
 
+			<label>Extracted Rating</label>
+			<input
+				style={inputStyle}
+				min={0}
+				max={5}
+				name="product_rating"
+				value={+(productData?.product_rating || 0)}
+				type="number"
+				placeholder="Review Score"
+				onChange={onChange}
+			/>
+
+			<label>Extracted Price</label>
+			<input
+				style={inputStyle}
+				name="product_price"
+				value={productData?.product_price}
+				placeholder="Product Price"
+				onChange={onChange}
+			/>
+
+			<label>Extraced Descriiption</label>
+			<textarea style={inputStyle} name="product_description" onChange={onChange} rows={7}>
+				{productData?.product_description}
+			</textarea>
+
+			<label>Extraced Images</label>
+			<div style={imageGridDiv}>
+				{productData?.product_image_urls?.map((url: string, i: number) => (
+					<div key={i} style={imageContainer}>
+						<img src={url} style={productImage} />
+					</div>
+				))}
+			</div>
+
+			<div style={flexContainerStyle}>
+				<button style={primaryButtonStyle} onClick={onClick}>
+					Save product
+				</button>
 				<button
+					style={secondaryButtonStyle}
 					onClick={() => {
 						setHideProductModal(true);
 					}}
 				>
-					Close
+					Discard
 				</button>
-				<br></br>
-				<button onClick={onClick}>Save product</button>
 			</div>
-		</div>
+		</BaseModal>
 	);
 };
 
