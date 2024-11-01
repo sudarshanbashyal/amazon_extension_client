@@ -2,6 +2,8 @@ import { CSSProperties } from 'react';
 
 export const colors = {
 	primaryBlue: '#1E90FF',
+	primaryRed: '#FF003F',
+	primaryGreen: '#06402B',
 };
 
 export const modalOverlayStyles: CSSProperties = {
@@ -34,9 +36,11 @@ export const modalSubtitleStyle: CSSProperties = {
 };
 
 export const sidebarStyles: CSSProperties = {
+	overflowX: 'scroll',
+	overflowY: 'visible',
 	height: '100vh',
 	width: '50%',
-	position: 'absolute',
+	position: 'fixed',
 	right: '-50%',
 	top: 0,
 	backgroundColor: 'white',
@@ -51,22 +55,35 @@ export const sidebarStylesActive: CSSProperties = {
 };
 
 export const sidebarToggle: CSSProperties = {
-	position: 'absolute',
+	position: 'fixed',
+	right: 0,
 	top: '50%',
-	left: '-20px',
-	transform: 'translate(-50%, -50%)',
+	zIndex: '9999',
 	height: '100px',
 	width: '50px',
 	borderRadius: '75px 0 0 75px',
-	backgroundColor: 'white',
+	backgroundColor: colors.primaryBlue,
 	cursor: 'pointer',
 	boxShadow: '-5px 0 5px rgba(0, 0, 0, 0.2)',
+};
+
+export const sidebarToggleActive: CSSProperties = {
+	...sidebarToggle,
+	right: '50%',
 };
 
 export const sidebarIcon: CSSProperties = {
 	position: 'absolute',
 	top: '35%',
 	left: '10%',
+};
+
+export const sidebarLoginPromptContainer: CSSProperties = {
+	height: '100%',
+	width: '100%',
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center',
 };
 
 export const imageGridDiv: CSSProperties = {
@@ -109,6 +126,13 @@ export const primaryButtonStyle: CSSProperties = {
 	cursor: 'pointer',
 };
 
+export const primaryButtonDisabledStyle: CSSProperties = {
+	...primaryButtonStyle,
+	backgroundColor: 'gray',
+	border: '1px solid gray',
+	cursor: 'not-allowed',
+};
+
 export const secondaryButtonStyle: CSSProperties = {
 	border: '1px solid black',
 	borderRadius: '5px',
@@ -144,4 +168,12 @@ export const productDetailsKeyStyle: CSSProperties = {
 
 export const productDetailsTextStyle: CSSProperties = {
 	marginBottom: '0.5rem',
+};
+
+export const errorStyle: CSSProperties = {
+	color: colors.primaryRed,
+};
+
+export const successStyle: CSSProperties = {
+	color: colors.primaryGreen,
 };

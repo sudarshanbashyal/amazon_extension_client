@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
+	errorStyle,
 	flexContainerStyle,
 	inputStyle,
 	modalOverlayStyles,
@@ -26,8 +27,9 @@ export const RegisterModal = ({ setAuthMode }: any) => {
 		password: '',
 		confirmPassword: '',
 	});
+	const [errorMessage, setErrorMessage] = useState('');
 
-	const registerMutation = useMutation({
+	const registerMutation = useMutation<any, any, any>({
 		mutationFn: (registerDto: RegisterDto) => createUser(registerDto),
 	});
 
@@ -38,8 +40,17 @@ export const RegisterModal = ({ setAuthMode }: any) => {
 		}));
 	};
 
-	const onSubmit = (e: any) => {
+	const onSubmit = (e: React.FormEvent) => {
+		setErrorMessage('');
 		e.preventDefault();
+		if (userData?.password?.trim()?.length < 6) {
+			setErrorMessage('Password must be at least 6 characters in length.');
+			return;
+		}
+		if (userData?.password !== userData?.confirmPassword) {
+			setErrorMessage('Passwords must be the same.');
+			return;
+		}
 		const registerData = userData;
 		delete registerData.confirmPassword;
 		registerMutation.mutate(registerData);
@@ -51,54 +62,68 @@ export const RegisterModal = ({ setAuthMode }: any) => {
 		}
 	}, [registerMutation]);
 
+	useEffect(() => {
+		if (!registerMutation?.error) return;
+		if (registerMutation?.error?.response?.errors?.length)
+			setErrorMessage(registerMutation?.error?.response?.errors?.[0]?.message);
+		else setErrorMessage('Failed to register. Please try again.');
+	}, [registerMutation]);
+
 	return (
 		<BaseModal modalTitle="Register" modalSubtitle="Create a new account">
-			<label>Name</label>
-			<input style={inputStyle} name="name" value={userData.name} placeholder="Name" onChange={onChange} />
+			<form onSubmit={onSubmit}>
+				<label>Name</label>
+				<input required style={inputStyle} name="name" value={userData.name} placeholder="Name" onChange={onChange} />
 
-			<label>Email</label>
-			<input
-				style={inputStyle}
-				name="email"
-				value={userData.email}
-				type="email"
-				placeholder="Email"
-				onChange={onChange}
-			/>
+				<label>Email</label>
+				<input
+					required
+					style={inputStyle}
+					name="email"
+					value={userData.email}
+					type="email"
+					placeholder="Email"
+					onChange={onChange}
+				/>
 
-			<label>Password</label>
-			<input
-				style={inputStyle}
-				type="password"
-				name="password"
-				value={userData.password}
-				placeholder="Password"
-				onChange={onChange}
-			/>
+				<label>Password</label>
+				<input
+					required
+					style={inputStyle}
+					type="password"
+					name="password"
+					value={userData.password}
+					placeholder="Password"
+					onChange={onChange}
+				/>
 
-			<label>Confirm Password</label>
-			<input
-				style={inputStyle}
-				name="confirmPassword"
-				type="password"
-				value={userData.confirmPassword}
-				placeholder="Confirm Password"
-				onChange={onChange}
-			/>
+				<label>Confirm Password</label>
+				<input
+					required
+					style={inputStyle}
+					name="confirmPassword"
+					type="password"
+					value={userData.confirmPassword}
+					placeholder="Confirm Password"
+					onChange={onChange}
+				/>
 
-			<div style={flexContainerStyle}>
-				<button style={primaryButtonStyle} onClick={onSubmit}>
-					Create account
-				</button>
-				<button
-					style={secondaryButtonStyle}
-					onClick={() => {
-						setAuthMode(AUTH_MODE.AUTH_LOGIN);
-					}}
-				>
-					Login Instead
-				</button>
-			</div>
+				{errorMessage && <p style={errorStyle}>{errorMessage}</p>}
+
+				<div style={flexContainerStyle}>
+					<button disabled={registerMutation.isLoading} style={primaryButtonStyle} formAction="submit">
+						Create account
+					</button>
+					<button
+						style={secondaryButtonStyle}
+						onClick={() => {
+							setAuthMode(AUTH_MODE.AUTH_LOGIN);
+						}}
+					>
+						Login Instead
+					</button>
+				</div>
+			</form>
 		</BaseModal>
 	);
 };

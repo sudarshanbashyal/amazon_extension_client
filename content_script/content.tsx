@@ -37,8 +37,6 @@ const checkForProductId = () => {
 	const productFactsDetails = document.getElementById('productFactsDesktop_feature_div');
 	const featuredBulletsEl = document.getElementById('feature-bullets');
 
-	console.log('content script: ', featuredBulletsEl);
-
 	const productImageUrls: string[] = [];
 	const productTitle = productTitleEl?.innerText?.trim() || '';
 	const productAvgReview = reviewEl?.textContent || '';
@@ -108,7 +106,6 @@ const checkIfExtensionEnabled = () => {
 checkIfExtensionEnabled();
 
 chrome.storage.local.onChanged.addListener((event: any) => {
-	console.log('changed value: ', event?.extension_enabled?.newValue);
 	if (event?.extension_enabled?.newValue) {
 		checkForProductId();
 	} else if (event?.extension_enabled?.oldValue) {

@@ -5,7 +5,6 @@ export interface DefaultPopupProps {
 
 const DefaultPopup = ({ isExtensionEnabled, setIsExtensionEnabled }: DefaultPopupProps) => {
 	const toggleExtension = () => {
-		console.log('hello world');
 		if (isExtensionEnabled) {
 			chrome.storage.local.remove('extension_enabled');
 		} else {
@@ -15,9 +14,7 @@ const DefaultPopup = ({ isExtensionEnabled, setIsExtensionEnabled }: DefaultPopu
 	};
 
 	const checkEnabled = () => {
-		chrome.storage.local.get(['extension_enabled'], (items) => {
-			console.log('is enabled: ', items.extension_enabled);
-		});
+		chrome.storage.local.get(['extension_enabled'], (items) => {});
 	};
 
 	return (

@@ -9,7 +9,7 @@ export const BaseModal = ({ modalTitle, modalSubtitle, children }: any) => {
 					<p style={modalSubtitleStyle}>{modalSubtitle}</p>
 					<hr></hr>
 				</div>
-				{...children}
+				{children}
 			</div>
 		</div>
 	);

@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
-import { inputStyle, modalOverlayStyles, modalStyles, primaryButtonStyle, secondaryButtonStyle } from './styles';
+import {
+	errorStyle,
+	inputStyle,
+	modalOverlayStyles,
+	modalStyles,
+	primaryButtonStyle,
+	secondaryButtonStyle,
+} from './styles';
 import { useQuery } from 'react-query';
 import { login } from '../services/api';
 import { AUTH_MODE } from '../App';
@@ -16,7 +23,9 @@ export interface LoginProps {
 }
 
 export const LoginModal = ({ setAuthToken, setAuthMode }: LoginProps) => {
-	const { data, error, refetch } = useQuery({
+	const [errorMessage, setErrorMessage] = useState('');
+
+	const { data, error, refetch, isLoading } = useQuery<any, any>({
 		queryFn: () => login(userData),
 		retry: 0,
 		retryOnMount: false,
@@ -46,46 +55,60 @@ export const LoginModal = ({ setAuthToken, setAuthMode }: LoginProps) => {
 		}));
 	};
 
-	const onSubmit = (e: any) => {
+	const onSubmit = (e: React.FormEvent) => {
+		setErrorMessage('');
 		e.preventDefault();
 		refetch();
 	};
 
+	useEffect(() => {
+		if (!error) return;
+		if (error?.response?.errors?.length) setErrorMessage(error?.response?.errors?.[0]?.message);
+		else setErrorMessage('Failed to login. Please try again.');
+	}, [error]);
+
 	return (
 		<BaseModal modalTitle="Sign In" modalSubtitle="Log in to your account to save products.">
-			<label>Email</label>
-			<input
-				style={inputStyle}
-				name="email"
-				value={userData.email}
-				type="email"
-				placeholder="Email"
-				onChange={onChange}
-			/>
+			<form onSubmit={onSubmit}>
+				<label>Email</label>
+				<input
+					style={inputStyle}
+					name="email"
+					value={userData.email}
+					type="email"
+					placeholder="Email"
+					onChange={onChange}
+					required
+				/>
 
-			<label>Password</label>
-			<input
-				style={inputStyle}
-				name="password"
-				type="password"
-				value={userData.password}
-				placeholder="Password"
-				onChange={onChange}
-			/>
+				<label>Password</label>
+				<input
+					style={inputStyle}
+					name="password"
+					type="password"
+					value={userData.password}
+					placeholder="Password"
+					onChange={onChange}
+					required
+				/>
 
-			<div>
-				<button style={primaryButtonStyle} onClick={onSubmit}>
-					Submit
-				</button>
-				<button
-					style={secondaryButtonStyle}
-					onClick={() => {
-						setAuthMode(AUTH_MODE.AUTH_REGISTER);
-					}}
-				>
-					Register Instead
-				</button>
-			</div>
+				{errorMessage && <p style={errorStyle}>{errorMessage}</p>}
+
+				<div>
+					<button formAction="submit" style={primaryButtonStyle}>
+						Submit
+					</button>
+					<button
+						disabled={data || isLoading}
+						style={secondaryButtonStyle}
+						onClick={() => {
+							setAuthMode(AUTH_MODE.AUTH_REGISTER);
+						}}
+					>
+						Register Instead
+					</button>
+				</div>
+			</form>
 		</BaseModal>
 	);
 };

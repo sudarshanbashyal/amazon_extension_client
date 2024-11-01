@@ -1,4 +1,13 @@
-import { colors, primaryButtonStyle, sidebarIcon, sidebarStyles, sidebarStylesActive, sidebarToggle } from './styles';
+import {
+	colors,
+	primaryButtonStyle,
+	sidebarIcon,
+	sidebarLoginPromptContainer,
+	sidebarStyles,
+	sidebarStylesActive,
+	sidebarToggle,
+	sidebarToggleActive,
+} from './styles';
 import { FaAngleLeft } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
@@ -142,80 +151,84 @@ export interface ProductsModalProps {
 }
 
 export const ProductsModal = ({ setAuthMode }: ProductsModalProps) => {
-	const [showSidebar, setShowSidebar] = useState(true);
-	const [authToken, setAuthToken] = useState('abc');
+	const [showSidebar, setShowSidebar] = useState(false);
+	const [authToken, setAuthToken] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 
-	// const { data, error, refetch } = useQuery({
-	// 	queryFn: () =>
-	// 		getProductsByUser({
-	// 			access_token: authToken,
-	// 		}),
-	// 	enabled: !!authToken,
-	// 	refetchOnMount: false,
-	// 	refetchOnReconnect: false,
-	// 	refetchOnWindowFocus: false,
-	// });
+	const { data, error, refetch } = useQuery({
+		queryFn: () =>
+			getProductsByUser({
+				access_token: authToken,
+			}),
+		enabled: !!authToken,
+		refetchOnMount: false,
+		refetchOnReconnect: false,
+		refetchOnWindowFocus: false,
+	});
 
 	const logout = () => {
 		setAuthToken('');
 		chrome?.storage?.local?.remove('access_token');
 	};
 
-	// useEffect(() => {
-	// 	if (showSidebar && authToken) {
-	// 		refetch();
-	// 	}
-	// }, [showSidebar, authToken]);
+	useEffect(() => {
+		if (showSidebar && authToken) {
+			refetch();
+		}
+	}, [showSidebar, authToken]);
 
-	// useEffect(() => {
-	// 	setIsLoading(true);
-	// 	chrome?.storage?.local?.get(['access_token'], (items) => {
-	// 		const token = items?.access_token;
-	// 		setAuthToken(token);
-	// 		setIsLoading(false);
-	// 	});
-	// }, [showSidebar]);
+	useEffect(() => {
+		setIsLoading(true);
+		chrome?.storage?.local?.get(['access_token'], (items) => {
+			const token = items?.access_token;
+			setAuthToken(token);
+			setIsLoading(false);
+		});
+	}, [showSidebar]);
 
 	return (
-		<div className="sidebar-modal" style={showSidebar ? sidebarStylesActive : sidebarStyles}>
-			<div className="sidarbar-toggle" style={sidebarToggle}>
-				<div
-					className="sidebar-icon"
-					style={sidebarIcon}
-					onClick={() => {
-						setShowSidebar(!showSidebar);
-					}}
-				>
-					<FaAngleLeft color={colors.primaryBlue} size="25" />
+		<>
+			<div
+				onClick={() => {
+					setShowSidebar(!showSidebar);
+				}}
+				className="sidebar-toggle"
+				style={showSidebar ? sidebarToggleActive : sidebarToggle}
+			>
+				<div className="sidebar-icon" style={sidebarIcon}>
+					<FaAngleLeft color="white" size="25" />
 				</div>
 			</div>
-
-			{!isLoading &&
-				(!authToken ? (
-					<div>
-						Login to see your products here.
-						<button
-							onClick={() => {
-								setShowSidebar(false);
-								setAuthMode(AUTH_MODE.AUTH_LOGIN);
-							}}
-						>
-							Log In
-						</button>
-					</div>
-				) : (
-					<div>
-						<button style={primaryButtonStyle} onClick={logout}>
-							Logout
-						</button>
-						<div>
-							{products?.map((data: ProductDetail) => (
-								<ProductDetail productDetails={data} />
-							))}
+			<div className="sidebar-modal" style={showSidebar ? sidebarStylesActive : sidebarStyles}>
+				{!isLoading &&
+					(!authToken ? (
+						<div style={sidebarLoginPromptContainer}>
+							<h2>Login to see your saved products.</h2>
+							<button
+								style={primaryButtonStyle}
+								onClick={() => {
+									setShowSidebar(false);
+									setAuthMode(AUTH_MODE.AUTH_LOGIN);
+								}}
+							>
+								Log In
+							</button>
 						</div>
-					</div>
-				))}
-		</div>
+					) : (
+						<div>
+							<button style={primaryButtonStyle} onClick={logout}>
+								Logout
+							</button>
+							<div>
+								{!data?.getProductsByUser?.length && <h2>No Saved Products.</h2>}
+
+								{data?.getProductsByUser?.map((data: ProductDetail) => (
+									<ProductDetail productDetails={data} />
+								))}
+							</div>
+						</div>
+					))}
+			</div>
+		</>
 	);
 };

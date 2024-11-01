@@ -28,12 +28,7 @@ const App = ({ productData, hideComponent }: any) => {
 		product_rating: +productData?.review,
 	});
 
-	useEffect(() => {
-		console.log('product details: ', productDetails);
-	}, [productDetails]);
-
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		console.log(e.target.name, typeof e.target.value);
 		const target = e.target.name;
 		let val: string | number = e.target.value;
 		if (target === 'product_rating' && val) {
@@ -51,7 +46,6 @@ const App = ({ productData, hideComponent }: any) => {
 	useEffect(() => {
 		chrome?.storage?.local?.get(['extension_enabled'], (items) => {
 			const enabled = items.extension_enabled;
-			console.log('app is enabled: ', enabled);
 			if (enabled) {
 				setIsExtensionEnabled(true);
 			}
@@ -84,38 +78,38 @@ const App = ({ productData, hideComponent }: any) => {
 	// )}
 	//
 
-	return (
-		<div>
-			<ProductsModal setAuthMode={setAuthMode} />
-		</div>
-	);
-
 	// return (
 	// 	<div>
-	// 		{authMode === AUTH_MODE.AUTH_LOGIN && <LoginModal setAuthToken={setAuthToken} setAuthMode={setAuthMode} />}
-	// 		{Object.keys(productData || {})?.length ? (
-	// 			authMode === AUTH_MODE.AUTH_LOGIN ? (
-	// 				<LoginModal setAuthToken={setAuthToken} setAuthMode={setAuthMode} />
-	// 			) : authMode === AUTH_MODE.AUTH_REGISTER ? (
-	// 				<RegisterModal setAuthMode={setAuthMode} />
-	// 			) : !hideProductModal ? (
-	// 				<SaveProductModal
-	// 					productData={productDetails}
-	// 					onClose={hideComponent}
-	// 					onChange={onChange}
-	// 					setAuthMode={setAuthMode}
-	// 					setHideProductModal={setHideProductModal}
-	// 				/>
-	// 			) : (
-	// 				<ProductsModal setAuthMode={setAuthMode} />
-	// 			)
-	// 		) : productData ? (
-	// 			<ProductsModal setAuthMode={setAuthMode} />
-	// 		) : (
-	// 			<DefaultPopup isExtensionEnabled={isExtensionEnabled} setIsExtensionEnabled={setIsExtensionEnabled} />
-	// 		)}
+	// 		<RegisterModal setAuthMode={setAuthMode} setAuthToken={setAuthToken} />
 	// 	</div>
 	// );
+
+	return (
+		<div>
+			{authMode === AUTH_MODE.AUTH_LOGIN && <LoginModal setAuthToken={setAuthToken} setAuthMode={setAuthMode} />}
+			{Object.keys(productData || {})?.length ? (
+				authMode === AUTH_MODE.AUTH_LOGIN ? (
+					<LoginModal setAuthToken={setAuthToken} setAuthMode={setAuthMode} />
+				) : authMode === AUTH_MODE.AUTH_REGISTER ? (
+					<RegisterModal setAuthMode={setAuthMode} />
+				) : !hideProductModal ? (
+					<SaveProductModal
+						productData={productDetails}
+						onClose={hideComponent}
+						onChange={onChange}
+						setAuthMode={setAuthMode}
+						setHideProductModal={setHideProductModal}
+					/>
+				) : (
+					<ProductsModal setAuthMode={setAuthMode} />
+				)
+			) : productData ? (
+				<ProductsModal setAuthMode={setAuthMode} />
+			) : (
+				<DefaultPopup isExtensionEnabled={isExtensionEnabled} setIsExtensionEnabled={setIsExtensionEnabled} />
+			)}
+		</div>
+	);
 };
 
 export default App;
