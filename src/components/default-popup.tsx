@@ -1,3 +1,5 @@
+import { defaultPopupContainerStyle, primaryButtonStyle } from './styles';
+
 export interface DefaultPopupProps {
 	isExtensionEnabled: boolean;
 	setIsExtensionEnabled: (val: boolean) => void;
@@ -13,18 +15,20 @@ const DefaultPopup = ({ isExtensionEnabled, setIsExtensionEnabled }: DefaultPopu
 		setIsExtensionEnabled(!isExtensionEnabled);
 	};
 
-	const checkEnabled = () => {
-		chrome.storage.local.get(['extension_enabled'], (items) => {});
-	};
-
 	return (
-		<div>
-			<button onClick={toggleExtension}>{isExtensionEnabled ? 'Disable' : 'Enable'}Extension</button>
-			<br></br>
-			<br></br>
-			<button onClick={checkEnabled}>Check Enabled</button>
-			<br></br>
-			<br></br>
+		<div style={defaultPopupContainerStyle}>
+			<h2>👋 Hello, Welcome to</h2>
+			<h1>Amazon Product Extractor</h1>
+			<br />
+			{isExtensionEnabled ? (
+				<h4>The extension is enabled and ready to use.</h4>
+			) : (
+				<h4>To starting capturing amazon products, please enable this extension.</h4>
+			)}
+			<br />
+			<button style={primaryButtonStyle} onClick={toggleExtension}>
+				{isExtensionEnabled ? 'Disable ' : 'Enable '}Extension
+			</button>
 		</div>
 	);
 };

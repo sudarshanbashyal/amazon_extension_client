@@ -11,7 +11,7 @@ export interface LoginDto {
 }
 
 export interface LoginProps {
-	setAuthMode: (authMode: AUTH_MODE) => void;
+	setAuthMode: (authMode: AUTH_MODE | null) => void;
 	setAuthToken: (token: string) => void;
 }
 
@@ -62,7 +62,13 @@ export const LoginModal = ({ setAuthToken, setAuthMode }: LoginProps) => {
 	}, [error]);
 
 	return (
-		<BaseModal modalTitle="Sign In" modalSubtitle="Log in to your account to save products.">
+		<BaseModal
+			modalTitle="Sign In"
+			modalSubtitle="Log in to your account to save products."
+			onClose={() => {
+				setAuthMode(null);
+			}}
+		>
 			<form onSubmit={onSubmit}>
 				<label>Email</label>
 				<input
@@ -90,7 +96,7 @@ export const LoginModal = ({ setAuthToken, setAuthMode }: LoginProps) => {
 
 				<div>
 					<button formAction="submit" style={primaryButtonStyle}>
-						Submit
+						Sign In
 					</button>
 					<button
 						disabled={data || isLoading}

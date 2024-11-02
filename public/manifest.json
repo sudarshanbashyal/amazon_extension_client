@@ -1,10 +1,15 @@
 {
 	"manifest_version": 3,
-	"name": "React Chrome Extension",
+	"name": "Amazon Product Extractor (Pline)",
 	"version": "1.0.0",
-	"description": "A simple React app as a Chrome extension",
+	"description": "A simple chrome extension to capture amazon product info.",
 	"action": {
-		"default_popup": "index.html"
+		"default_popup": "index.html",
+		"default_icon": {
+			"16": "images/icon_16.png",
+			"48": "images/icon_48.png",
+			"128": "images/icon_128.png"
+		}
 	},
 	"permissions": ["activeTab", "tabs", "storage", "scripting"],
 	"host_permissions": ["http://*/*", "https://*/*"],

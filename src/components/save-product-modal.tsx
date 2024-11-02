@@ -80,7 +80,13 @@ const SaveProductModal = ({ productData, setAuthMode, onChange, setHideProductMo
 	}, [saveProductMutation]);
 
 	return (
-		<BaseModal modalTitle="Save Product" modalSubtitle="This product will be saved to your database.">
+		<BaseModal
+			modalTitle="Save Product"
+			modalSubtitle="This product will be saved to your database."
+			onClose={() => {
+				setHideProductModal(true);
+			}}
+		>
 			<form onSubmit={onSubmit}>
 				<label>Extracted Title</label>
 				<input

@@ -39,7 +39,7 @@ export const ProductDetail = ({ productDetails }: ProductDetailProps) => {
 				{textKeys.map((key) => (
 					<div key={key}>
 						<strong style={productDetailsKeyStyle}>{key.split('_').join(' ')}</strong>
-						<p style={productDetailsTextStyle}>{productDetails[key]}</p>
+						<p style={productDetailsTextStyle}>{productDetails[key] || '--'}</p>
 					</div>
 				))}
 

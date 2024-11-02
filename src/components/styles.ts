@@ -6,6 +6,40 @@ export const colors = {
 	primaryGreen: '#4BB543',
 };
 
+export const primaryButtonStyle: CSSProperties = {
+	padding: '0.75rem 1rem',
+	border: `1px solid ${colors.primaryBlue}`,
+	borderRadius: '5px',
+	backgroundColor: colors.primaryBlue,
+	color: 'white',
+	marginRight: '1rem',
+	cursor: 'pointer',
+};
+
+export const primaryButtonDisabledStyle: CSSProperties = {
+	...primaryButtonStyle,
+	backgroundColor: 'gray',
+	border: '1px solid gray',
+	cursor: 'not-allowed',
+};
+
+export const secondaryButtonStyle: CSSProperties = {
+	border: '1px solid black',
+	borderRadius: '5px',
+	padding: '0.75rem 1rem',
+	backgroundColor: 'transparent',
+	cursor: 'pointer',
+	display: 'inline-block',
+	color: 'black',
+	textDecoration: 'none',
+};
+
+export const plainButtonStyle: CSSProperties = {
+	...secondaryButtonStyle,
+	border: 'none',
+	paddingLeft: '0',
+};
+
 export const modalOverlayStyles: CSSProperties = {
 	position: 'fixed',
 	top: '0',
@@ -28,7 +62,16 @@ export const modalStyles: CSSProperties = {
 };
 
 export const modalHeaderStyle: CSSProperties = {
-	marginBottom: '2rem',
+	marginBottom: '1rem',
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'space-between',
+	paddingBottom: '0.5rem',
+	borderBottom: '1px solid gray',
+};
+
+export const modalIconStyle: CSSProperties = {
+	cursor: 'pointer',
 };
 
 export const modalSubtitleStyle: CSSProperties = {
@@ -86,6 +129,12 @@ export const sidebarLoginPromptContainer: CSSProperties = {
 	justifyContent: 'center',
 };
 
+export const sidebarloginButton: CSSProperties = {
+	...primaryButtonStyle,
+	margin: 'auto',
+	display: 'block',
+};
+
 export const imageGridDiv: CSSProperties = {
 	display: 'grid',
 	gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
@@ -114,40 +163,6 @@ export const flexContainerStyle: CSSProperties = {
 	alignItems: 'center',
 	justifyContent: 'flex-start',
 	marginTop: '2rem',
-};
-
-export const primaryButtonStyle: CSSProperties = {
-	padding: '0.75rem 1rem',
-	border: `1px solid ${colors.primaryBlue}`,
-	borderRadius: '5px',
-	backgroundColor: colors.primaryBlue,
-	color: 'white',
-	marginRight: '1rem',
-	cursor: 'pointer',
-};
-
-export const primaryButtonDisabledStyle: CSSProperties = {
-	...primaryButtonStyle,
-	backgroundColor: 'gray',
-	border: '1px solid gray',
-	cursor: 'not-allowed',
-};
-
-export const secondaryButtonStyle: CSSProperties = {
-	border: '1px solid black',
-	borderRadius: '5px',
-	padding: '0.75rem 1rem',
-	backgroundColor: 'transparent',
-	cursor: 'pointer',
-	display: 'inline-block',
-	color: 'black',
-	textDecoration: 'none',
-};
-
-export const plainButtonStyle: CSSProperties = {
-	...secondaryButtonStyle,
-	border: 'none',
-	paddingLeft: '0',
 };
 
 export const productDetailContainerStyle: CSSProperties = {
@@ -199,4 +214,13 @@ export const paginationContainerDisabledStyle: CSSProperties = {
 	...paginationContainerStyle,
 	border: '1px solid gray',
 	cursor: 'not-allowed',
+};
+
+export const defaultPopupContainerStyle: CSSProperties = {
+	minWidth: '400px',
+	padding: '2rem 2.5rem',
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center',
+	borderRadius: '10px',
 };

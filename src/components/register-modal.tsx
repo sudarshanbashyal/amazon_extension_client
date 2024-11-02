@@ -13,7 +13,7 @@ export interface RegisterDto {
 }
 
 export interface RegisterModalProps {
-	setAuthMode: (authMode: AUTH_MODE) => void;
+	setAuthMode: (authMode: AUTH_MODE | null) => void;
 }
 
 export const RegisterModal = ({ setAuthMode }: RegisterModalProps) => {
@@ -68,7 +68,13 @@ export const RegisterModal = ({ setAuthMode }: RegisterModalProps) => {
 	}, [registerMutation]);
 
 	return (
-		<BaseModal modalTitle="Register" modalSubtitle="Create a new account">
+		<BaseModal
+			modalTitle="Register"
+			modalSubtitle="Create a new account"
+			onClose={() => {
+				setAuthMode(null);
+			}}
+		>
 			<form onSubmit={onSubmit}>
 				<label>Name</label>
 				<input required style={inputStyle} name="name" value={userData.name} placeholder="Name" onChange={onChange} />

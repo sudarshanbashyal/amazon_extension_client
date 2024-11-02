@@ -10,7 +10,7 @@ export enum AUTH_MODE {
 	AUTH_REGISTER = 'AUTH_REGISTER',
 }
 
-const App = ({ productData, hideComponent }: any) => {
+const App = ({ productData }: any) => {
 	const [isExtensionEnabled, setIsExtensionEnabled] = useState(false);
 	const [authMode, setAuthMode] = useState<AUTH_MODE | null>(null);
 	const [authToken, setAuthToken] = useState('');

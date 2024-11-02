@@ -34,6 +34,7 @@ const checkForProductId = () => {
 	const reviewEl = document.querySelector('#averageCustomerReviews .a-size-base.a-color-base');
 	const pricesEl = document.querySelectorAll('.a-price.a-text-price');
 	const pricesAlternateEl = document.getElementById('corePriceDisplay_desktop_feature_div');
+	const pricesWithOptionsEl = document.getElementById('twister');
 
 	const productFactsDetails = document.getElementById('productFactsDesktop_feature_div');
 	const featuredBulletsEl = document.getElementById('feature-bullets');
@@ -66,6 +67,17 @@ const checkForProductId = () => {
 
 		let totalPriceString = `${sym}${whole}${frac}`;
 		productPrices.add(totalPriceString);
+	}
+
+	if (pricesWithOptionsEl) {
+		const priceLiElements = document.querySelectorAll('.twisterSlotDiv');
+		priceLiElements.forEach((el) => {
+			const priceText = el?.querySelector('span > span')?.innerHTML;
+			if (priceText) {
+				const separatedPrice = priceText.split('<br>')?.[1] || '';
+				productPrices.add(separatedPrice?.trim());
+			}
+		});
 	}
 
 	const productDescriptionPoints: string[] = [];

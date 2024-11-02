@@ -4,15 +4,14 @@ import { LoginDto } from '../components/login-modal';
 import { PaginationVaribles } from '../components/products.modal';
 import { RegisterDto } from '../components/register-modal';
 import { SaveProductDto } from '../components/save-product-modal';
+import { config } from '../config';
 import { createUserMutation, getProductsByUserQuery, loginQuery, pingQuery, saveProductMutation } from './graphql';
 
-export const GRAPHQL_ENDPOINT = 'http://localhost:4000/graphql';
-
-export const pingServer = () => request(GRAPHQL_ENDPOINT, pingQuery);
+export const pingServer = () => request(config.GRAPHQL_ENDPOINT, pingQuery);
 
 export const createUser = async (queryVariables: RegisterDto) => {
 	try {
-		return await request(GRAPHQL_ENDPOINT, createUserMutation, queryVariables);
+		return await request(config.GRAPHQL_ENDPOINT, createUserMutation, queryVariables);
 	} catch (error) {
 		throw error;
 	}
@@ -20,7 +19,7 @@ export const createUser = async (queryVariables: RegisterDto) => {
 
 export const login = async (queryVariables: LoginDto) => {
 	try {
-		return await request(GRAPHQL_ENDPOINT, loginQuery, queryVariables);
+		return await request(config.GRAPHQL_ENDPOINT, loginQuery, queryVariables);
 	} catch (error) {
 		throw error;
 	}
@@ -28,7 +27,7 @@ export const login = async (queryVariables: LoginDto) => {
 
 export const saveProduct = async (queryVariables: SaveProductDto, headers: Object) => {
 	try {
-		return await request(GRAPHQL_ENDPOINT, saveProductMutation, queryVariables, headers);
+		return await request(config.GRAPHQL_ENDPOINT, saveProductMutation, queryVariables, headers);
 	} catch (error) {
 		throw error;
 	}
@@ -36,7 +35,7 @@ export const saveProduct = async (queryVariables: SaveProductDto, headers: Objec
 
 export const getProductsByUser = async (queryVariables: PaginationVaribles, headers: Object) => {
 	try {
-		return await request(GRAPHQL_ENDPOINT, getProductsByUserQuery, queryVariables, headers);
+		return await request(config.GRAPHQL_ENDPOINT, getProductsByUserQuery, queryVariables, headers);
 	} catch (error) {
 		throw error;
 	}
