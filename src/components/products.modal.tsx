@@ -156,9 +156,8 @@ export interface ProductsModalProps {
 	setAuthMode: (val: AUTH_MODE) => void;
 }
 
-export const ProductsModal = ({ setAuthMode }: ProductsModalProps) => {
+export const ProductsModal = ({ setAuthMode, authToken, setAuthToken }: any) => {
 	const [showSidebar, setShowSidebar] = useState(false);
-	const [authToken, setAuthToken] = useState(''); //
 	const [isLoading, setIsLoading] = useState(true); //
 	const [currPage, setCurrPage] = useState(1);
 
@@ -229,8 +228,8 @@ export const ProductsModal = ({ setAuthMode }: ProductsModalProps) => {
 							<button
 								style={primaryButtonStyle}
 								onClick={() => {
-									setShowSidebar(false);
 									setAuthMode(AUTH_MODE.AUTH_LOGIN);
+									setShowSidebar(false);
 								}}
 							>
 								Log In

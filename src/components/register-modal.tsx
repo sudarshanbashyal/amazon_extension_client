@@ -1,13 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-	errorStyle,
-	flexContainerStyle,
-	inputStyle,
-	modalOverlayStyles,
-	modalStyles,
-	primaryButtonStyle,
-	secondaryButtonStyle,
-} from './styles';
+import { errorStyle, flexContainerStyle, inputStyle, primaryButtonStyle, secondaryButtonStyle } from './styles';
 import { useMutation } from 'react-query';
 import { createUser } from '../services/api';
 import { AUTH_MODE } from '../App';
@@ -20,7 +12,11 @@ export interface RegisterDto {
 	confirmPassword?: string;
 }
 
-export const RegisterModal = ({ setAuthMode }: any) => {
+export interface RegisterModalProps {
+	setAuthMode: (authMode: AUTH_MODE) => void;
+}
+
+export const RegisterModal = ({ setAuthMode }: RegisterModalProps) => {
 	const [userData, setUserData] = useState<RegisterDto>({
 		name: '',
 		email: '',
@@ -30,7 +26,7 @@ export const RegisterModal = ({ setAuthMode }: any) => {
 	const [errorMessage, setErrorMessage] = useState('');
 
 	const registerMutation = useMutation<any, any, any>({
-		mutationFn: (registerDto: RegisterDto) => createUser(registerDto),
+		mutationFn: () => createUser(userData),
 	});
 
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,8 +37,10 @@ export const RegisterModal = ({ setAuthMode }: any) => {
 	};
 
 	const onSubmit = (e: React.FormEvent) => {
+		registerMutation.reset();
 		setErrorMessage('');
 		e.preventDefault();
+
 		if (userData?.password?.trim()?.length < 6) {
 			setErrorMessage('Password must be at least 6 characters in length.');
 			return;
@@ -51,8 +49,8 @@ export const RegisterModal = ({ setAuthMode }: any) => {
 			setErrorMessage('Passwords must be the same.');
 			return;
 		}
+
 		const registerData = userData;
-		delete registerData.confirmPassword;
 		registerMutation.mutate(registerData);
 	};
 
@@ -63,7 +61,7 @@ export const RegisterModal = ({ setAuthMode }: any) => {
 	}, [registerMutation]);
 
 	useEffect(() => {
-		if (!registerMutation?.error) return;
+		if (!registerMutation?.error || registerMutation.isLoading) return;
 		if (registerMutation?.error?.response?.errors?.length)
 			setErrorMessage(registerMutation?.error?.response?.errors?.[0]?.message);
 		else setErrorMessage('Failed to register. Please try again.');

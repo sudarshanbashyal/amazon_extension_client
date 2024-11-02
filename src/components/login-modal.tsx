@@ -1,12 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-	errorStyle,
-	inputStyle,
-	modalOverlayStyles,
-	modalStyles,
-	primaryButtonStyle,
-	secondaryButtonStyle,
-} from './styles';
+import { errorStyle, inputStyle, primaryButtonStyle, secondaryButtonStyle } from './styles';
 import { useQuery } from 'react-query';
 import { login } from '../services/api';
 import { AUTH_MODE } from '../App';
@@ -33,6 +26,7 @@ export const LoginModal = ({ setAuthToken, setAuthMode }: LoginProps) => {
 		refetchOnMount: false,
 		refetchOnReconnect: false,
 		refetchOnWindowFocus: false,
+		cacheTime: 0, // disable caching for login data
 	});
 
 	useEffect(() => {

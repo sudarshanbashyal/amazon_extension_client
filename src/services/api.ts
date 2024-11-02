@@ -1,5 +1,5 @@
 //@ts-ignore
-import request, { gql } from 'graphql-request';
+import request, { gql } from 'graphql-request'; // no type defs provided by npm
 import { LoginDto } from '../components/login-modal';
 import { PaginationVaribles } from '../components/products.modal';
 import { RegisterDto } from '../components/register-modal';

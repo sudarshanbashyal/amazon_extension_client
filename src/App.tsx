@@ -1,6 +1,3 @@
-import './index.css';
-import { useMutation, useQuery } from 'react-query';
-import { pingServer, saveProduct } from './services/api';
 import { RegisterModal } from './components/register-modal';
 import { LoginModal } from './components/login-modal';
 import SaveProductModal, { SaveProductDto } from './components/save-product-modal';
@@ -41,8 +38,6 @@ const App = ({ productData, hideComponent }: any) => {
 		}));
 	};
 
-	// const { data, error } = useQuery('ping', pingServer);
-
 	useEffect(() => {
 		chrome?.storage?.local?.get(['extension_enabled'], (items) => {
 			const enabled = items.extension_enabled;
@@ -58,41 +53,13 @@ const App = ({ productData, hideComponent }: any) => {
 		}
 	}, [authToken]);
 
-	// {Object.keys(productData || {})?.length ? (
-	// authMode === AUTH_MODE.AUTH_LOGIN ? (
-	// 	<LoginModal setAuthToken={setAuthToken} setAuthMode={setAuthMode} />
-	// ) : authMode === AUTH_MODE.AUTH_REGISTER ? (
-	// 	<RegisterModal setAuthMode={setAuthMode} />
-	// ) : (
-	// 	<SaveProductModal
-	// 		productData={productDetails}
-	// 		onClose={hideComponent}
-	// 		onChange={onChange}
-	// 		setAuthMode={setAuthMode}
-	// 	/>
-	// )
-	// ) : productData ? (
-	// <ProductsModal />
-	// ) : (
-	// <DefaultPopup />
-	// )}
-	//
-
-	// return (
-	// 	<div>
-	// 		<ProductsModal setAuthMode={setAuthMode} />
-	// 	</div>
-	// );
-
 	return (
 		<div>
 			{authMode === AUTH_MODE.AUTH_LOGIN && <LoginModal setAuthToken={setAuthToken} setAuthMode={setAuthMode} />}
-			{Object.keys(productData || {})?.length ? (
-				authMode === AUTH_MODE.AUTH_LOGIN ? (
-					<LoginModal setAuthToken={setAuthToken} setAuthMode={setAuthMode} />
-				) : authMode === AUTH_MODE.AUTH_REGISTER ? (
-					<RegisterModal setAuthMode={setAuthMode} />
-				) : !hideProductModal ? (
+			{authMode === AUTH_MODE.AUTH_REGISTER && <RegisterModal setAuthMode={setAuthMode} />}
+
+			{Object.keys(productData || {}).length ? (
+				!hideProductModal && !authMode ? (
 					<SaveProductModal
 						productData={productDetails}
 						onClose={hideComponent}
@@ -101,10 +68,10 @@ const App = ({ productData, hideComponent }: any) => {
 						setHideProductModal={setHideProductModal}
 					/>
 				) : (
-					<ProductsModal setAuthMode={setAuthMode} />
+					<ProductsModal authToken={authToken} setAuthToken={setAuthToken} setAuthMode={setAuthMode} />
 				)
 			) : productData ? (
-				<ProductsModal setAuthMode={setAuthMode} />
+				<ProductsModal authToken={authToken} setAuthToken={setAuthToken} setAuthMode={setAuthMode} />
 			) : (
 				<DefaultPopup isExtensionEnabled={isExtensionEnabled} setIsExtensionEnabled={setIsExtensionEnabled} />
 			)}
