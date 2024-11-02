@@ -62,7 +62,6 @@ const App = ({ productData, hideComponent }: any) => {
 				!hideProductModal && !authMode ? (
 					<SaveProductModal
 						productData={productDetails}
-						onClose={hideComponent}
 						onChange={onChange}
 						setAuthMode={setAuthMode}
 						setHideProductModal={setHideProductModal}

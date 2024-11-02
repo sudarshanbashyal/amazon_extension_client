@@ -28,19 +28,12 @@ export interface SaveProductDto {
 
 export interface SaveProductModalProps {
 	productData: SaveProductDto;
-	onClose: () => void;
 	onChange: any;
 	setAuthMode: (mode: AUTH_MODE) => void;
 	setHideProductModal: (hide: boolean) => void;
 }
 
-const SaveProductModal = ({
-	productData,
-	setAuthMode,
-	onClose,
-	onChange,
-	setHideProductModal,
-}: SaveProductModalProps) => {
+const SaveProductModal = ({ productData, setAuthMode, onChange, setHideProductModal }: SaveProductModalProps) => {
 	const [authToken, setAuthToken] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
 
@@ -138,23 +131,25 @@ const SaveProductModal = ({
 				{errorMessage && <p style={errorStyle}>{errorMessage}</p>}
 				{saveProductMutation?.data && <p style={successStyle}>Product saved successfully!</p>}
 
-				<div style={flexContainerStyle}>
-					<button
-						disabled={saveProductMutation?.isLoading || saveProductMutation?.data}
-						style={saveProductMutation?.isLoading ? primaryButtonDisabledStyle : primaryButtonStyle}
-						formAction="submit"
-					>
-						{saveProductMutation?.isLoading ? 'Processing..' : 'Save Product'}
-					</button>
-					<button
-						style={secondaryButtonStyle}
-						onClick={() => {
-							setHideProductModal(true);
-						}}
-					>
-						Discard
-					</button>
-				</div>
+				{!saveProductMutation?.data && (
+					<div style={flexContainerStyle}>
+						<button
+							disabled={saveProductMutation?.isLoading || saveProductMutation?.data}
+							style={saveProductMutation?.isLoading ? primaryButtonDisabledStyle : primaryButtonStyle}
+							formAction="submit"
+						>
+							{saveProductMutation?.isLoading ? 'Processing..' : 'Save Product'}
+						</button>
+						<button
+							style={secondaryButtonStyle}
+							onClick={() => {
+								setHideProductModal(true);
+							}}
+						>
+							Discard
+						</button>
+					</div>
+				)}
 			</form>
 		</BaseModal>
 	);

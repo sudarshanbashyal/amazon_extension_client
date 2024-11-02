@@ -3,7 +3,7 @@ import { CSSProperties } from 'react';
 export const colors = {
 	primaryBlue: '#1E90FF',
 	primaryRed: '#FF003F',
-	primaryGreen: '#06402B',
+	primaryGreen: '#4BB543',
 };
 
 export const modalOverlayStyles: CSSProperties = {
@@ -175,7 +175,13 @@ export const errorStyle: CSSProperties = {
 };
 
 export const successStyle: CSSProperties = {
-	color: colors.primaryGreen,
+	margin: 'auto',
+	backgroundColor: colors.primaryGreen,
+	textAlign: 'center',
+	color: 'white',
+	padding: '0.5rem 1rem',
+	marginTop: '1rem',
+	borderRadius: '5px',
 };
 
 export const paginationContainerStyle: CSSProperties = {
