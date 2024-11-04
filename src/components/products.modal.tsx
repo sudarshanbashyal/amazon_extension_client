@@ -23,11 +23,13 @@ export interface PaginationVaribles {
 
 export interface ProductsModalProps {
 	setAuthMode: (val: AUTH_MODE) => void;
+	authToken: string;
+	setAuthToken: (token: string) => void;
 }
 
-export const ProductsModal = ({ setAuthMode, authToken, setAuthToken }: any) => {
+export const ProductsModal = ({ setAuthMode, authToken, setAuthToken }: ProductsModalProps) => {
 	const [showSidebar, setShowSidebar] = useState(false);
-	const [isLoading, setIsLoading] = useState(true); //
+	const [isLoading, setIsLoading] = useState(true);
 	const [currPage, setCurrPage] = useState(1);
 
 	const modalRef = useRef<HTMLDivElement>(null);
@@ -70,6 +72,7 @@ export const ProductsModal = ({ setAuthMode, authToken, setAuthToken }: any) => 
 		});
 	}, [showSidebar]);
 
+	// Scroll to top each time the page changes.
 	useEffect(() => {
 		if (modalRef?.current) {
 			modalRef?.current?.scrollTo(0, 0);

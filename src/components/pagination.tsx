@@ -13,6 +13,10 @@ export interface PaginationProps {
 	isLoading: boolean;
 }
 
+/*
+ * The Pagination Comp accepts event props for onNext/onPrev so that this component can be made
+ * reusable instead of a one-time thing.
+ */
 export const Pagination = ({ paginationData, onNext, onPrev, isLoading }: PaginationProps) => {
 	return (
 		<>
