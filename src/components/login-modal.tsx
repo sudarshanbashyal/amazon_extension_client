@@ -26,9 +26,14 @@ export const LoginModal = ({ setAuthToken, setAuthMode }: LoginProps) => {
 		refetchOnMount: false,
 		refetchOnReconnect: false,
 		refetchOnWindowFocus: false,
-		cacheTime: 0, // disable caching for login data
+		/*
+		 * Setting the cache time to 0 for login.
+		 * If cache is enabled for login, when the user logs out, the auth token is again set from the cache resulting in inconsistency.
+		 */
+		cacheTime: 0,
 	});
 
+	// Update the state present in App.tsx so that the auth token can be in other API calls
 	useEffect(() => {
 		if (data?.login) {
 			chrome.storage.local.set({ access_token: data.login }, () => {

@@ -16,6 +16,10 @@ const App = ({ productData }: any) => {
 	const [authToken, setAuthToken] = useState('');
 	const [hideProductModal, setHideProductModal] = useState(false);
 
+	/*
+	 * State for product details are set in the App.tsx so that when changes are made, and then user has to either login/register
+	 * the changed data is still preserved even after the product modal is mounted and unmounted.
+	 */
 	const [productDetails, setProductDetails] = useState<SaveProductDto>({
 		product_title: productData?.title,
 		product_url: productData?.productUrl,

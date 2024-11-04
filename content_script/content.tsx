@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from '../src/App';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
+// Unmount the react component from DOM when extension is disabled.
 const hideComponent = () => {
 	const reactNode = document.getElementById('react-root');
 	reactNode?.remove();
@@ -29,15 +30,25 @@ const showComponent = (data: any) => {
 
 const checkForProductId = () => {
 	const productTitleEl = document.getElementById('productTitle');
+
+	// DOM elements for the primary and alt images
 	const productImageEl = document.querySelector('#imgTagWrapperId img');
 	const productAltImagesEl = document.querySelectorAll('.item.imageThumbnail');
+
 	const reviewEl = document.querySelector('#averageCustomerReviews .a-size-base.a-color-base');
+
+	/*
+	 * The DOM content/structure for prices, and description are different depending on the type of product,
+	 * So multiple DOM elements have been listed to increase extraction accuracy.
+	 */
 	const pricesEl = document.querySelectorAll('.a-price.a-text-price');
 	const pricesAlternateEl = document.getElementById('corePriceDisplay_desktop_feature_div');
 	const pricesWithOptionsEl = document.getElementById('twister');
 
 	const productFactsDetails = document.getElementById('productFactsDesktop_feature_div');
 	const featuredBulletsEl = document.getElementById('feature-bullets');
+	const descriptionEl = document.getElementById('productDescription');
+	const descriptionFeatureDivEl = document.getElementById('bookDescription_feature_div');
 
 	const productImageUrls: string[] = [];
 	const productTitle = productTitleEl?.innerText?.trim() || '';
@@ -89,6 +100,14 @@ const checkForProductId = () => {
 			if (point) productDescriptionPoints.push(point);
 		});
 	}
+	if (descriptionEl) {
+		const descriptionText = descriptionEl.textContent || '';
+		productDescriptionPoints.push(descriptionText?.trim());
+	}
+	if (descriptionFeatureDivEl) {
+		const descriptionText = descriptionFeatureDivEl.textContent || '';
+		productDescriptionPoints.push(descriptionText?.trim());
+	}
 
 	// fetching current url without the query params
 	const currentTabUrl = window.location?.href?.split('?')[0] || '';
@@ -104,6 +123,10 @@ const checkForProductId = () => {
 			productUrl: currentTabUrl,
 		});
 	} else {
+		/*
+		 * Injecting component with empty object in case it is not the product page,
+		 * but the page still belongs to amazon so that the sidebar can be shown.
+		 */
 		showComponent({});
 	}
 };
@@ -119,6 +142,7 @@ const checkIfExtensionEnabled = () => {
 
 checkIfExtensionEnabled();
 
+// Listening to disable/enable extension events.
 chrome.storage.local.onChanged.addListener((event: any) => {
 	if (event?.extension_enabled?.newValue) {
 		checkForProductId();

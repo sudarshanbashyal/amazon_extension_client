@@ -35,6 +35,7 @@ export const ProductDetail = ({ productDetails }: ProductDetailProps) => {
 				Visit Link <FaExternalLinkAlt />
 			</a>
 
+			{/* Looping through the keys to get the fields that are only texts to lessen repeated code */}
 			<div className="details-inner" style={productDetailsInnerStyle}>
 				{textKeys.map((key) => (
 					<div key={key}>
