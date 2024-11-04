@@ -118,10 +118,7 @@ All the queries and mutations used for the extension are listed below:
 		}
 
 ## UI Showcase
-Please find the client-side features listed below along with a video showcasing basis usage:
-
-- Video Demo
-[![Amazon Extractor Demo](https://player.vimeo.com/video/1026202412)
+Please find Please find the client-side features listed below along with relevant screenshots. You can also find a full video showcasing basic usage [here](https://vimeo.com/1026202412?share=copy).
 
  - Popup for enabling/disabling the extension
 ![Popup for Enabling/Disabling the extension](https://lh3.googleusercontent.com/pw/AP1GczMuzx2_uFWZGNtF2Lrt3wcXZ_clu7yrzqqUiO5dbHXsJxRoHzK-TRDuvgmxLsClodtpVWUEzdO13NRIGXK4JLlel9tWpiW_0lM7KR2ipKKNVh7aYInKoaTyeg8tWpRtPFMvbb_1PejGZRYdcBkEOAnv=w817-h413-s-no-gm)
