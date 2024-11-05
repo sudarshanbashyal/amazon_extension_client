@@ -20,7 +20,7 @@ The aim of this project was to create a simple chrome extension to extract produ
  - Install all the dependencies using `npm i`
  - Open the `src/config.ts` file and change the `config.GRAPHQL_ENDPOINT` variable to match the endpoint of your local backend server.  
  - After all the dependencies have been installed, build the project using `npm run build`
- - Once the project has been built, a `dist` folder should appear into the root directory of the project. 
+ - Once the project has been built, a `dist` folder should appear in the root directory of the project. 
  - Navigate over to the extensions manager section of your chrome web browser, and upload the `dist` folder with the `Load Unpacked` option.
  - A new extension should appear in the extensions manager after completion of all the aforementioned steps. 
 
@@ -28,7 +28,7 @@ The aim of this project was to create a simple chrome extension to extract produ
 
 ## Technologies Used
 
- - [ReactJS](https://react.dev/) - Used for building all parts of the chrome extension.
+ - [ReactJS](https://react.dev/) - Used for building UI componenst for the extension.
  - [Vite](https://vite.dev/) - This project was scaffolded using vite, as it provides better tooling compared to other build tools. 
  - [TypeScript](https://www.typescriptlang.org/) - Added for better type safety, and error handling. 
  - [GraphQL](https://graphql.org/) - API Query language used for all backend queries. 
@@ -118,7 +118,7 @@ All the queries and mutations used for the extension are listed below:
 		}
 
 ## UI Showcase
-Please find Please find the client-side features listed below along with relevant screenshots. You can also find a full video showcasing basic usage [here](https://vimeo.com/1026202412?share=copy).
+Please find the client-side features listed below along with relevant screenshots. You can also find a full video showcasing basic usage [here](https://vimeo.com/1026202412?share=copy).
 
  - Popup for enabling/disabling the extension
 ![Popup for Enabling/Disabling the extension](https://lh3.googleusercontent.com/pw/AP1GczMuzx2_uFWZGNtF2Lrt3wcXZ_clu7yrzqqUiO5dbHXsJxRoHzK-TRDuvgmxLsClodtpVWUEzdO13NRIGXK4JLlel9tWpiW_0lM7KR2ipKKNVh7aYInKoaTyeg8tWpRtPFMvbb_1PejGZRYdcBkEOAnv=w817-h413-s-no-gm)
